@@ -1,0 +1,14 @@
+{
+  "name": "coletor-de-textos",
+  "version": "1.0.0",
+  "description": "Coletar textos em uma página web dada e salvar na máquina local.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:dev"
+  },
+  "author": "Eder TS",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}
