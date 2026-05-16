@@ -4,7 +4,8 @@
   "description": "Coletar textos em uma página web dada e salvar na máquina local.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test:dev"
+    "test": "npm run dev",
+    "start": "node index.js"
   },
   "author": "Eder TS",
   "license": "ISC",
