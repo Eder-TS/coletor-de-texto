@@ -1,6 +1,6 @@
 const { loadEnvFile } = require('node:process');
-const assert = require('node:assert');
 const { chromium } = require('playwright');
+const fs = require('node:fs');
 
 (async () => {
     loadEnvFile('./.env');
@@ -23,6 +23,13 @@ const { chromium } = require('playwright');
     await page.getByRole('tab', { name: 'Resumo' }).click();
     
     const content = await page.getByRole('tabpanel').innerHTML();
-
+    saver(content);
     await browser.close();
 })();
+
+function saver(content) {
+    const path = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/by Coletor de Texto/aula 2'
+    fs.writeFile(path, content, { flag: 'w+' }, err => {});
+    // /home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/
+    return;
+}
