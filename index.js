@@ -1,11 +1,14 @@
 const { loadEnvFile } = require('node:process');
 const { chromium } = require('playwright');
-const fs = require('node:fs');
+const { fs, access } = require('node:fs');
+
+let pathToSave = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/by Coletor de Texto';
+let content;
 
 (async () => {
     loadEnvFile('./.env');
 
-    const browser = await chromium.launch({headless: false, slowMo: 200});
+    const browser = await chromium.launch({headless: false, slowMo: 50});
     const page = await browser.newPage();
     
     await page.goto('https://app.itsdnc.com.br/login');
@@ -18,18 +21,33 @@ const fs = require('node:fs');
 
     await page.getByRole('link', { name: 'Cursos' }).click();
     await page.getByRole('heading', { name: 'Engenheiro de Software' }).click();
-    await page.getByRole('button', { name: 'MATÉRIA 1 1. Introdução ao' }).click();
-    await page.getByRole('button', { name: '2. Introdução à Tecnologia' }).click();
-    await page.getByRole('tab', { name: 'Resumo' }).click();
+
+    content = await iteratorToContent(page);
     
-    const content = await page.getByRole('tabpanel').innerHTML();
-    saver(content);
+    //saver(content);
+
+    console.log('All content was collected!');
     await browser.close();
 })();
 
+async function iteratorToContent(page) {
+    const discipline = /MATÉRIA 1 \b/i;
+    const classes = /\b1. \b/;
+
+    await page.getByRole('button', { name: discipline }).click();
+    await page.getByRole('button').locator('span').getByText(classes).click();
+    try {
+        await page.getByRole('tab', { name: 'Resumo' }).click({timeout: 250});
+        content = await page.getByRole('tabpanel').innerHTML();
+        return content;
+    } catch (error) {
+        console.log(error);
+        return content = 0;
+    }
+}
+
 function saver(content) {
-    const path = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/by Coletor de Texto/aula 2'
-    fs.writeFile(path, content, { flag: 'w+' }, err => {});
-    // /home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/
+    
+    fs.writeFile(pathToSave, content, { flag: 'w+' }, err => {});
     return;
 }
