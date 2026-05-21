@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Coletar textos em uma página web dada e salvar na máquina local.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "npm run dev",
     "start": "node index.js"

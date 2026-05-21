@@ -1,10 +1,10 @@
-const { loadEnvFile } = require('node:process');
-const { chromium } = require('playwright');
-const fs = require('node:fs');
+import { loadEnvFile } from 'node:process';
+import { chromium } from 'playwright';
+import { writeFileSync } from 'node:fs';
 
 let pathToSave = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/by Coletor de Texto/';
 let actualClasses = 1;
-let content = 1;
+let content;
 let classTitle;
 
 (async () => {
@@ -21,54 +21,53 @@ let classTitle;
     await page.getByRole('textbox', { name: 'Senha' }).fill(password);
     await page.getByRole('button', { name: 'Entrar' }).click();
 
-    while (content !== 0) {
-        await page.getByRole('link', { name: 'Cursos' }).click();
-        await page.getByRole('heading', { name: 'Engenheiro de Software' }).click();
-
-        if (content === 1) {
-            content = await iteratorToContent(page);
-        } else {
-            content = await iteratorToContent(page);
-            saver(content);
-        }
-    }
+    await classesIterator(page);
 
     console.log('All content was collected!');
     await browser.close();
 })();
 
-async function iteratorToContent(page) {
+async function classesIterator(page) {
     const discipline = /MATÉRIA 1 \b/i;
-    const classes = new RegExp(`\\b${actualClasses}. \\b`);
-    //console.log();
+    let end = false;
+    while (!end) {
+        const classes = new RegExp(`\\b${actualClasses}. \\b`);
 
-    await page.getByRole('button', { name: discipline }).click();
-    try {
-        await page.getByRole('button').locator('span').getByText(classes).click({timeout: 250});
-        console.log('entrou na aula')
-        return content = await internalIterator(page);
-    } catch (error) {
-        console.log(`Fim das aulas da ${discipline}`);
-        return content = 0;
+        await page.getByRole('link', { name: 'Cursos' }).click();
+        await page.getByRole('heading', { name: 'Engenheiro de Software' }).click();
+        await page.getByRole('button', { name: discipline }).click();
+
+        try {
+            await page.getByRole('button').locator('span').getByText(classes).click({timeout: 250});
+            await tryTab(page);
+        } catch (error) {
+            console.log(`Fim das aulas da ${discipline}`);
+            end = true;
+        }
     }
+    end = false;
+    return;
 }
 
-async function internalIterator(page) {
+async function tryTab(page) {
     try {
         await page.getByRole('tab', { name: 'Resumo' }).click({timeout: 250});
         content = await page.getByRole('tabpanel').innerHTML();
-console.log('copiou conteúdo ')
+        console.log('copiou conteúdo ')
         classTitle = `Aula ${actualClasses}`;
+        saver(content);
         actualClasses = actualClasses + 1;
-        return content;
-    } catch (TimeoutError) {
-        console.log('pulou aula')
+        return;
+    } catch (error) {
+        console.log(`pulou aula ${actualClasses}`)
         actualClasses = actualClasses + 1;
-        return content = 1;
+        return;
     }
 }
 
 function saver(content) {
-    fs.writeFileSync(`${pathToSave}${classTitle}`, content, { flag: 'w+' }, err => {});
+    writeFileSync(`${pathToSave}${classTitle}`, content, { flag: 'w+' }, err => {
+        console.log(err);
+    });
     return;
 }
