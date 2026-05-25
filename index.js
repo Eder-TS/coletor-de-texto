@@ -82,8 +82,17 @@ async function tryTab(page) {
 }
 
 function saver(content) {
-    writeFileSync(`${pathToSave}${classTitle}`, content, { flag: 'w+' }, err => {
+    console.log('securing falename...');
+    const secureFileName = sanitizeFileName(classTitle);
+
+    console.log('saving...');
+    writeFileSync(`${pathToSave}${secureFileName}`, content, { flag: 'w+' }, err => {
         console.log(err);
     });
     return;
+}
+
+function sanitizeFileName(classTitle) {
+    const secureFileName = classTitle.replace(/[\\/:*?"<>|]/g, '-');
+    return secureFileName;
 }
