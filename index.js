@@ -2,8 +2,8 @@ import { loadEnvFile } from 'node:process';
 import { chromium } from 'playwright';
 import { writeFileSync } from 'node:fs';
 
-let pathToSave = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/Matéria 8/';
-let disciplineToCopy = 'Matéria 8'
+let pathToSave = '/home/ederts/Documentos/Cursos de Programação/DNC/Aula em Texto/Matéria 11/';
+let disciplineToCopy = 'Matéria 11'
 let actualClasses = 1;
 let content;
 let classTitle;
