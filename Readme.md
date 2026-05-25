@@ -15,6 +15,7 @@ A princípio a aplicação funciona bem para a plataforma que está inserida mas
 
 Uma automação que ainda falta é alternar entre as matérias do curso. Mesmo assim estaria longe de servir a qualquer plataforma. Tendo em vista que a plataforma inserida é moderna, esta aplicação facilmente poderá ser testada em outros sites e plataformas.
 É evidente que uma interface facilitaria o uso, porém necessitaria de uma definição de escopo para quê se evite um leque muito amplo de plataformas, o quê tornaria a configuração muito complexa.
+Também é possível adicionar a biblioteca Turndown e transformar o texto bruto HTML em algo mais legível para humanos e buscadores.
 
 Eder TS
 Desenvolvedor full stack
